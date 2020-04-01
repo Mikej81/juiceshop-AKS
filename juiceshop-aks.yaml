@@ -76,7 +76,3 @@ spec:
           serviceName: juiceshop
           servicePort: 80
         path: /(.*)
-      - backend:
-          serviceName: ingress-basic
-          servicePort: 80
-        path: /(/|$)(.*)
