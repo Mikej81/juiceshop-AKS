@@ -6,22 +6,22 @@ az aks create --resource-group myResourceGroup --name juiceCluster --node-count 
 ##
 ##az aks install-cli
 az aks get-credentials --resource-group myResourceGroup --name juiceCluster
-##
-kubectl get nodes
-##
-elm install stable/nginx-ingress \
-    --namespace ingress-basic \
+## create the namespace
+kubectl create namespace juiceshop
+# Add the official stable repository
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+## install nginx ingress controller
+helm install nginx-ingress stable/nginx-ingress \
+    --namespace juiceshop \
     -f internal-ingress.yaml \
     --set controller.replicaCount=2 \
     --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
     --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
 ##
-kubectl create namespace ingress-basic
+#kubectl get service -l app=nginx-ingress --namespace juiceshop
 ##
-kubectl apply -f ingress.yaml
-##
-kubectl get all -n ingress-nginx
+kubectl get all -n juiceshop
 ##
 kubectl apply -f juiceshop-aks.yaml
 ##
-kubectl get service juiceshop-public
+#kubectl get service
