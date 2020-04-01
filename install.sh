@@ -11,4 +11,4 @@ kubectl get nodes
 ##
 kubectl apply -f juiceshop-aks.yaml
 ##
-kubectl get service juiceshop-public --watch
+kubectl get service juiceshop-public
