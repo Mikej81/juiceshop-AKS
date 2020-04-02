@@ -15,6 +15,11 @@ metadata:
   namespace: juiceshop
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: "30%"
+      maxUnavailable: "10%"
   selector:
     matchLabels:
       app: juiceshop
@@ -28,6 +33,20 @@ spec:
       containers:
       - name: juiceshop
         image: bkimminich/juice-shop:v9.1.3
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          tcpSocket:
+            port: 3000
+        readinessProbe:
+          failureThreshold: 2
+          initialDelaySeconds: 35
+          periodSeconds: 5
+          successThreshold: 3
+          timeoutSeconds: 10
+          httpGet:
+            path: /
+            port: 3000
         resources:
           requests:
             cpu: 100m
@@ -70,5 +89,5 @@ spec:
       paths:
       - backend:
           serviceName: juiceshop
-          servicePort: 80
+          servicePort: 3000
         path: /(.*)
